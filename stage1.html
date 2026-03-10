@@ -40,6 +40,10 @@
     .editor-toolbar button:hover { background: #e0f2fe; }
     .editor-wrap { border: 1px solid #94a3b8; border-radius: 8px; overflow: hidden; }
     .editor-wrap .CodeMirror { min-height: 180px; font-size: 14px; }
+    .practice-result { margin-top: 0.5rem; padding: 0.75rem; border-radius: 8px; font-family: monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; min-height: 2.5rem; }
+    .practice-result.running { background: #fef3c7; color: #92400e; }
+    .practice-result.ok { background: #d1fae5; color: #065f46; }
+    .practice-result.error { background: #fee2e2; color: #991b1b; }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/tomorrow-night-eighties.min.css">
@@ -86,9 +90,10 @@
 
       <div class="practice-editor-section">
         <h3>✏️ 여기서 직접 실습해 보세요 (2단계 예습 코드)</h3>
-        <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">모바일에서도 이 창에서 수정·포맷·복사할 수 있어요. 복사한 뒤 온라인 C 컴파일러에 붙여 넣어 실행하세요.</p>
+        <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">모바일에서도 이 창에서 수정·포맷·실행·복사할 수 있어요. [실행]으로 바로 결과를 볼 수 있습니다.</p>
         <div class="editor-toolbar">
           <button type="button" id="practice-format">포맷</button>
+          <button type="button" id="practice-run">실행</button>
           <button type="button" id="practice-copy">복사</button>
         </div>
         <div class="editor-wrap">
@@ -101,6 +106,7 @@ printf("a의 주소: %p\n", (void*)&a);
 return 0;
 }</textarea>
         </div>
+        <div id="practice-result" class="practice-result" aria-live="polite"></div>
       </div>
 
       <div class="task">
