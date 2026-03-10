@@ -97,7 +97,10 @@
         var runUrl = 'https://ce.judge0.com/submissions?base64_encoded=false&wait=true';
         fetch(runUrl, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
           body: JSON.stringify({
             source_code: code,
             language_id: 50,
@@ -105,14 +108,23 @@
           })
         })
           .then(function (res) {
-            if (res.status === 401) {
-              runBtn.disabled = false;
-              resultBox.textContent = '실행 서비스 인증 필요(401).\n→ [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
-              resultBox.className = toolbarId + '-result error';
-              return Promise.reject(new Error('401'));
-            }
-            if (!res.ok) throw new Error('API ' + res.status);
-            return res.json();
+            return res.json().then(function (data) {
+              if (res.status === 401) {
+                runBtn.disabled = false;
+                resultBox.textContent = '실행 서비스 인증 필요(401).\n→ [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
+                resultBox.className = toolbarId + '-result error';
+                return Promise.reject(new Error('401'));
+              }
+              if (res.status === 400) {
+                runBtn.disabled = false;
+                var msg = (data && (data.error || data.message)) ? String(data.error || data.message) : '요청 형식 오류(400)';
+                resultBox.textContent = msg + '\n→ [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
+                resultBox.className = toolbarId + '-result error';
+                return Promise.reject(new Error('400'));
+              }
+              if (!res.ok) throw new Error('API ' + res.status);
+              return data;
+            });
           })
           .then(function (data) {
             if (!data) return;
@@ -130,7 +142,7 @@
           })
           .catch(function (err) {
             runBtn.disabled = false;
-            if (err && err.message === '401') return;
+            if (err && (err.message === '401' || err.message === '400')) return;
             resultBox.textContent = '실행 실패 (네트워크 또는 CORS). [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
             resultBox.className = toolbarId + '-result error';
           });
