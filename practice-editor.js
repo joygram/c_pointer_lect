@@ -94,45 +94,43 @@
         runBtn.disabled = true;
         resultBox.textContent = '실행 중…';
         resultBox.className = toolbarId + '-result running';
-        fetch('https://emkc.org/api/v2/piston/execute', {
+        var runUrl = 'https://ce.judge0.com/submissions?base64_encoded=false&wait=true';
+        fetch(runUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            language: 'c',
-            version: '10.2.0',
-            files: [{ name: 'main.c', content: code }],
-            stdin: '',
-            compile_timeout: 10000,
-            run_timeout: 5000
+            source_code: code,
+            language_id: 50,
+            stdin: ''
           })
         })
           .then(function (res) {
+            if (res.status === 401) {
+              runBtn.disabled = false;
+              resultBox.textContent = '실행 서비스 인증 필요(401).\n→ [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
+              resultBox.className = toolbarId + '-result error';
+              return Promise.reject(new Error('401'));
+            }
             if (!res.ok) throw new Error('API ' + res.status);
             return res.json();
           })
           .then(function (data) {
+            if (!data) return;
             runBtn.disabled = false;
             var out = '';
-            if (!data.run && !data.compile && data.message) {
-              resultBox.textContent = 'API: ' + data.message + '\n→ [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
-              resultBox.className = toolbarId + '-result error';
-              return;
-            }
-            if (data.compile && (data.compile.stderr || data.compile.output)) {
-              out += '[컴파일]\n' + (data.compile.stderr || data.compile.output) + '\n';
-            }
-            if (data.run) {
-              if (data.run.output && data.run.output.trim()) out += data.run.output;
-              else { out += data.run.stdout || ''; if (data.run.stderr) out += data.run.stderr; }
-              if (data.run.signal) out += '\n(신호: ' + data.run.signal + ')';
-              if (out === '' && data.run.code !== undefined) out = '(종료 코드: ' + data.run.code + ')';
-            }
-            if (!out.trim()) out = '(출력 없음)\n→ 브라우저/환경 때문에 원격 실행이 제한될 수 있어요. [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
+            if (data.compile_output) out += '[컴파일]\n' + data.compile_output + '\n';
+            if (data.stdout) out += data.stdout;
+            if (data.stderr) out += data.stderr;
+            if (data.message) out += data.message;
+            var ok = data.status && data.status.id === 3;
+            if (!out.trim()) out = ok ? '(실행됨, 출력 없음)' : (data.status ? data.status.description : '') || '실행 실패';
+            if (!out.trim()) out += '\n→ [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
             resultBox.textContent = out.trim();
-            resultBox.className = toolbarId + '-result ' + (data.run && data.run.code === 0 ? 'ok' : 'error');
+            resultBox.className = toolbarId + '-result ' + (ok ? 'ok' : 'error');
           })
           .catch(function (err) {
             runBtn.disabled = false;
+            if (err && err.message === '401') return;
             resultBox.textContent = '실행 실패 (네트워크 또는 CORS). [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
             resultBox.className = toolbarId + '-result error';
           });
