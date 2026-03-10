@@ -37,11 +37,15 @@
     if (!textarea) return null;
 
     var defaultCode = textarea.value;
+    var initialCode = defaultCode.trim();
+    try {
+      initialCode = formatC(initialCode);
+    } catch (e) { /* 포맷 실패 시 원본 유지 */ }
     var container = textarea.parentNode;
     textarea.style.display = 'none';
 
     var editor = CodeMirror(container, {
-      value: defaultCode,
+      value: initialCode,
       mode: 'text/x-csrc',
       theme: 'tomorrow-night-eighties',
       lineNumbers: true,
@@ -102,25 +106,34 @@
             run_timeout: 5000
           })
         })
-          .then(function (res) { return res.json(); })
+          .then(function (res) {
+            if (!res.ok) throw new Error('API ' + res.status);
+            return res.json();
+          })
           .then(function (data) {
             runBtn.disabled = false;
             var out = '';
-            if (data.compile && data.compile.stderr) {
-              out += '[컴파일]\n' + data.compile.stderr + '\n';
+            if (!data.run && !data.compile && data.message) {
+              resultBox.textContent = 'API: ' + data.message + '\n→ [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
+              resultBox.className = toolbarId + '-result error';
+              return;
+            }
+            if (data.compile && (data.compile.stderr || data.compile.output)) {
+              out += '[컴파일]\n' + (data.compile.stderr || data.compile.output) + '\n';
             }
             if (data.run) {
-              if (data.run.stdout) out += data.run.stdout;
-              if (data.run.stderr) out += data.run.stderr;
+              if (data.run.output && data.run.output.trim()) out += data.run.output;
+              else { out += data.run.stdout || ''; if (data.run.stderr) out += data.run.stderr; }
               if (data.run.signal) out += '\n(신호: ' + data.run.signal + ')';
               if (out === '' && data.run.code !== undefined) out = '(종료 코드: ' + data.run.code + ')';
             }
-            resultBox.textContent = out || '(출력 없음)';
+            if (!out.trim()) out = '(출력 없음)\n→ 브라우저/환경 때문에 원격 실행이 제한될 수 있어요. [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
+            resultBox.textContent = out.trim();
             resultBox.className = toolbarId + '-result ' + (data.run && data.run.code === 0 ? 'ok' : 'error');
           })
           .catch(function (err) {
             runBtn.disabled = false;
-            resultBox.textContent = '실행 실패 (네트워크 또는 CORS). 복사 후 온라인 컴파일러에서 실행해 보세요.';
+            resultBox.textContent = '실행 실패 (네트워크 또는 CORS). [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
             resultBox.className = toolbarId + '-result error';
           });
       });
