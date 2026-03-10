@@ -83,6 +83,27 @@
         });
       });
     }
+    var embedIframe = document.getElementById(toolbarId + '-compiler-embed');
+    if (embedIframe) {
+      var embedBtn = document.getElementById(toolbarId + '-embed-run');
+      if (embedBtn) {
+        embedBtn.addEventListener('click', function () {
+          var code = editor.getValue();
+          try {
+            embedIframe.contentWindow.postMessage({
+              eventType: 'populateCode',
+              language: 'c',
+              files: [{ name: 'main.c', content: code }]
+            }, 'https://onecompiler.com');
+            resultBox.textContent = '아래 컴파일러에 코드를 보냈어요. [Run]을 눌러 실행하세요.';
+            if (resultBox) resultBox.className = toolbarId + '-result ok';
+          } catch (e) {
+            if (resultBox) resultBox.textContent = '아래 컴파일러가 로드된 뒤 다시 시도하세요.';
+            if (resultBox) resultBox.className = toolbarId + '-result error';
+          }
+        });
+      }
+    }
     if (runBtn && resultBox) {
       runBtn.addEventListener('click', function () {
         var code = editor.getValue();
@@ -143,7 +164,7 @@
           .catch(function (err) {
             runBtn.disabled = false;
             if (err && (err.message === '401' || err.message === '400')) return;
-            resultBox.textContent = '실행 실패 (네트워크 또는 CORS). [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
+            resultBox.textContent = '실행 실패 (네트워크 또는 CORS). [아래에서 실행]으로 아래 컴파일러에 코드를 보내거나, [복사] 후 programiz에서 실행해 보세요.';
             resultBox.className = toolbarId + '-result error';
           });
       });
