@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기능사 단골 기출 - 포인터 | C 포인터 쉽게 배우기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #f0f4ff; --card: #fff; --accent: #5b7cff; --text: #2d3748; --shadow: 0 4px 20px rgba(91, 124, 255, 0.15); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); padding: 2rem; }
+    .container { max-width: 700px; margin: 0 auto; }
+    .back { margin-bottom: 1rem; }
+    .back a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+    h1 { font-family: 'Jua', sans-serif; font-size: 1.8rem; color: var(--accent); margin-bottom: 0.5rem; }
+    .subtitle { color: #666; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .section { background: var(--card); border-radius: 16px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+    .section h2 { font-size: 1.15rem; margin-bottom: 0.75rem; color: #444; border-left: 4px solid var(--accent); padding-left: 0.75rem; }
+    .section p, .section li { line-height: 1.75; margin-bottom: 0.5rem; }
+    .q-label { font-weight: 700; color: #7c3aed; margin-bottom: 0.25rem; }
+    .answer-box { background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 0.75rem 1rem; margin: 0.5rem 0; font-family: monospace; white-space: pre-wrap; }
+    .explain { background: #f0f9ff; border-radius: 8px; padding: 0.75rem; margin-top: 0.5rem; font-size: 0.9rem; color: #1e40af; }
+    .similar { border-left: 4px solid #10b981; background: #f0fdf4; padding: 0.75rem; margin-top: 1rem; border-radius: 0 8px 8px 0; }
+    .similar h3 { font-size: 0.95rem; color: #047857; margin-bottom: 0.5rem; }
+    .deep-section { border: 2px solid #7c3aed; background: #f5f3ff; }
+    .deep-section h2 { color: #5b21b6; }
+    .tip-box { background: #fffbeb; border: 2px solid #f59e0b; border-radius: 12px; padding: 1rem; margin: 0.5rem 0; }
+    .tip-box h3 { font-size: 1rem; color: #b45309; margin-bottom: 0.5rem; }
+    .mistake { background: #fef2f2; border-left: 4px solid #dc2626; padding: 0.5rem 0.75rem; margin: 0.5rem 0; border-radius: 0 8px 8px 0; font-size: 0.9rem; }
+    pre[class*="language-"] { margin: 0.75rem 0; border-radius: 10px; }
+    code { font-family: 'Consolas', 'Monaco', monospace; }
+    code[class*="language-"] { font-size: 0.9rem; }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="back"><a href="index.html">← 목록으로</a></div>
+    <h1>📋 컴퓨터 프로그래밍 기능사 단골 기출 (포인터)</h1>
+    <p class="subtitle">기능사 시험에 자주 나오는 포인터 유형을 모았어요. 5단계 강의를 본 뒤 풀어 보세요.</p>
+
+    <div class="section">
+      <h2>1. 주소와 값 출력 (기본)</h2>
+      <p class="q-label">다음 프로그램의 출력 결과는?</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int a = 10, b = 20;
+    int *p = &a;
+    printf("%d ", *p);
+    p = &b;
+    printf("%d", *p);
+    return 0;
+}</code></pre>
+      <p class="answer-box">10 20</p>
+      <div class="explain"><strong>해설:</strong> p가 먼저 a를 가리키므로 *p는 10. 그다음 p = &b로 b를 가리키므로 *p는 20.</div>
+    </div>
+
+    <div class="section">
+      <h2>2. 문자열 포인터 – %s, %c (단골)</h2>
+      <p class="q-label">다음 프로그램의 출력 결과는?</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    char *p = "KOREA";
+    printf("%s\n", p);
+    printf("%s\n", p + 3);
+    printf("%c\n", *p);
+    printf("%c\n", *(p + 3));
+    printf("%c\n", *p + 2);
+    return 0;
+}</code></pre>
+      <p class="answer-box">KOREA
+EA
+K
+E
+M</p>
+      <div class="explain"><strong>해설:</strong> %s는 주소부터 널문자 전까지 출력. p+3은 "EA"부터. *p는 'K', *(p+3)은 'E'. *p+2는 'K'(ASCII 75)+2 = 77 = 'M'.</div>
+      <div class="similar">
+        <h3>📌 유사문제 (문자열 포인터)</h3>
+        <p class="q-label">char *q = "ABC"; 일 때 printf("%c", *(q+1)); printf("%c", *q+1); 의 출력은?</p>
+        <p class="answer-box">B
+B</p>
+        <div class="explain">*(q+1)은 두 번째 문자 'B'. *q+1은 'A'(65)+1 = 66 = 'B'.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>3. 배열과 포인터 (포인터로 배열 접근)</h2>
+      <p class="q-label">다음 프로그램의 출력 결과는?</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int a[] = { 10, 20, 30 };
+    int *p = a;
+    printf("%d ", *p);
+    printf("%d ", *(p + 1));
+    printf("%d", *(p + 2));
+    return 0;
+}</code></pre>
+      <p class="answer-box">10 20 30</p>
+      <div class="explain"><strong>해설:</strong> 배열 이름 a는 첫 번째 요소의 주소. p가 a를 가리키므로 *p는 a[0], *(p+1)은 a[1], *(p+2)는 a[2].</div>
+    </div>
+
+    <div class="section">
+      <h2>4. 포인터로 값 바꾸기</h2>
+      <p class="q-label">다음 프로그램의 출력 결과는?</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int x = 5, y = 10;
+    int *p = &x;
+    *p = *p + 5;
+    printf("%d %d", x, y);
+    return 0;
+}</code></pre>
+      <p class="answer-box">10 10</p>
+      <div class="explain"><strong>해설:</strong> p가 x를 가리키므로 *p = *p + 5는 x의 값을 5만큼 더함. x는 10이 되고, y는 그대로 10.</div>
+    </div>
+
+    <div class="section">
+      <h2>5. 배열 + 포인터 연산 (합·차 계산)</h2>
+      <p class="q-label">다음 프로그램의 출력 결과는?</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int a[4] = { 1, 2, 3, 4 };
+    int *p = a;
+    int sum = 0;
+    for (int i = 0; i < 4; i++)
+        sum += *(p + i);
+    printf("%d", sum);
+    return 0;
+}</code></pre>
+      <p class="answer-box">10</p>
+      <div class="explain"><strong>해설:</strong> *(p+0)~*(p+3)은 a[0]~a[3]과 같음. 1+2+3+4 = 10.</div>
+      <div class="similar">
+        <h3>📌 유사문제 (배열·포인터 합)</h3>
+        <p class="q-label">int b[] = { 2, 4, 6 }; int *p = b; printf("%d", *p + *(p+1) + *(p+2)); 의 출력은?</p>
+        <p class="answer-box">12</p>
+        <div class="explain">*p=2, *(p+1)=4, *(p+2)=6 → 2+4+6 = 12.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>6. 구조체 포인터 (→ 화살표)</h2>
+      <p class="q-label">다음 프로그램의 출력 결과는? (기능사에서 가끔 출제)</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+struct Data { int n; };
+int main() {
+    struct Data d = { 100 };
+    struct Data *p = &d;
+    printf("%d", p->n);
+    return 0;
+}</code></pre>
+      <p class="answer-box">100</p>
+      <div class="explain"><strong>해설:</strong> 포인터 p가 구조체를 가리킬 때 멤버 접근은 p->n. p가 가리키는 구조체의 n 값이 100.</div>
+      <div class="similar">
+        <h3>📌 유사문제 (구조체 포인터)</h3>
+        <p class="q-label">struct T { int x; }; struct T v = { 50 }; struct T *r = &v; printf("%d", r->x + 10); 의 출력은?</p>
+        <p class="answer-box">60</p>
+        <div class="explain">r->x는 50이므로 50+10 = 60.</div>
+      </div>
+    </div>
+
+    <div class="section deep-section">
+      <h2>🔬 심화학습</h2>
+      <p>기능사 한 단계 위 난이도. 포인터 연산·함수 인자·포인터 증감을 다룹니다.</p>
+
+      <p class="q-label">[심화 1] p++, *p++ 의 차이 – 다음 출력은?</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int a[] = { 10, 20, 30 };
+    int *p = a;
+    printf("%d ", *p++);
+    printf("%d ", *p);
+    return 0;
+}</code></pre>
+      <p class="answer-box">10 20</p>
+      <div class="explain"><strong>해설:</strong> *p++는 "현재 *p를 먼저 쓰고, 그다음 p를 1 증가". 그래서 10 출력 후 p가 a+1을 가리켜 다음 *p는 20.</div>
+
+      <p class="q-label">[심화 2] 함수에 포인터 넘기기 – 다음 출력은?</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+void add(int *p) { *p = *p + 10; }
+int main() {
+    int n = 5;
+    add(&n);
+    printf("%d", n);
+    return 0;
+}</code></pre>
+      <p class="answer-box">15</p>
+      <div class="explain"><strong>해설:</strong> add(&n)으로 n의 주소를 넘기면 함수 안에서 *p로 n이 있는 방을 바꿈. n = 5+10 = 15.</div>
+
+      <p class="q-label">[심화 3] 두 포인터로 스왑 – 다음 출력은?</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+int main() {
+    int x = 3, y = 7;
+    int *p = &x, *q = &y;
+    int t = *p; *p = *q; *q = t;
+    printf("%d %d", x, y);
+    return 0;
+}</code></pre>
+      <p class="answer-box">7 3</p>
+      <div class="explain"><strong>해설:</strong> *p와 *q(즉 x와 y)의 값을 임시 변수 t로 바꿔 넣음. x와 y가 서로 바뀜.</div>
+    </div>
+
+    <div class="section">
+      <h2>💡 보강 – 자주 틀리는 것 &amp; 시험 팁</h2>
+      <div class="tip-box">
+        <h3>✓ 시험 전 체크</h3>
+        <ul>
+          <li><code>*p</code> = 값, <code>p</code> = 주소, <code>&amp;a</code> = a의 주소</li>
+          <li><code>*p+2</code>는 (*p)+2 (값에 2 더함, ASCII에서 자주 나옴). <code>*(p+2)</code>는 p에서 2칸 뒤의 값.</li>
+          <li>문자열: <code>%s</code>는 (주소부터) 문자열, <code>%c</code>는 한 문자. <code>*(p+i)</code>는 i번째 문자.</li>
+          <li>구조체: 변수는 <code>d.n</code>, 포인터는 <code>p->n</code> (화살표 한 번만).</li>
+        </ul>
+      </div>
+      <div class="mistake">
+        <strong>자주 틀리는 것 1:</strong> <code>*p+1</code>과 <code>*(p+1)</code>을 혼동. 전자는 "가리키는 값+1", 후자는 "다음 칸의 값".
+      </div>
+      <div class="mistake">
+        <strong>자주 틀리는 것 2:</strong> <code>printf("%s", *p);</code>처럼 %s에 *p를 넣으면 안 됨. %s에는 주소(p)를 넣어야 함.
+      </div>
+      <div class="mistake">
+        <strong>자주 틀리는 것 3:</strong> 구조체 포인터에서 <code>p.n</code>이라고 쓰면 오류. 반드시 <code>p->n</code>.
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>정리</h2>
+      <ul>
+        <li><code>*p</code> = p가 가리키는 <strong>값</strong>, <code>&amp;a</code> = a의 <strong>주소</strong></li>
+        <li>문자열: <code>%s</code>는 주소부터 출력, <code>%c</code>는 한 글자. <code>*p+2</code>는 (값)+2 (ASCII 연산)</li>
+        <li>배열: <code>*(p+i)</code> = <code>p[i]</code> = 배열 i번째 요소</li>
+        <li>구조체 포인터: <code>p-&gt;멤버</code></li>
+      </ul>
+    </div>
+
+    <p style="text-align:center; margin-top:1.5rem;"><a href="index.html" style="color:var(--accent); font-weight:700;">← 목록으로</a></p>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+</body>
+</html>

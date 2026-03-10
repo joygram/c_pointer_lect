@@ -39,6 +39,10 @@
     .editor-toolbar button:hover { background: #e0f2fe; }
     .editor-wrap { border: 1px solid #94a3b8; border-radius: 8px; overflow: hidden; }
     .editor-wrap .CodeMirror { min-height: 220px; font-size: 14px; }
+    .practice-result { margin-top: 0.5rem; padding: 0.75rem; border-radius: 8px; font-family: monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; min-height: 2.5rem; }
+    .practice-result.running { background: #fef3c7; color: #92400e; }
+    .practice-result.ok { background: #d1fae5; color: #065f46; }
+    .practice-result.error { background: #fee2e2; color: #991b1b; }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
@@ -110,6 +114,7 @@ int main() {
         <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">아래 창에서 코드를 수정한 뒤 [포맷]으로 정리하고 [복사]로 붙여 넣어 온라인 컴파일러에서 실행하세요.</p>
         <div class="editor-toolbar">
           <button type="button" id="practice-format">포맷</button>
+          <button type="button" id="practice-run">실행</button>
           <button type="button" id="practice-copy">복사</button>
         </div>
         <div class="editor-wrap">
@@ -124,6 +129,7 @@ printf("\n");
 return 0;
 }</textarea>
         </div>
+        <div id="practice-result" class="practice-result" aria-live="polite"></div>
       </div>
       <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
 
