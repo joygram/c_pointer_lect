@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5단계 - 포인터 활용하기 | C 포인터 쉽게 배우기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #f0f4ff; --card: #fff; --accent: #5b7cff; --text: #2d3748; --shadow: 0 4px 20px rgba(91, 124, 255, 0.15); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); padding: 2rem; }
+    .container { max-width: 700px; margin: 0 auto; }
+    .back { margin-bottom: 1rem; }
+    .back a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+    h1 { font-family: 'Jua', sans-serif; font-size: 1.8rem; color: var(--accent); margin-bottom: 1rem; }
+    .section { background: var(--card); border-radius: 16px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+    .section h2 { font-size: 1.15rem; margin-bottom: 0.75rem; color: #444; }
+    .section p, .section li { line-height: 1.75; margin-bottom: 0.5rem; }
+    code { font-family: 'Consolas', 'Monaco', monospace; }
+    .try-box { background: #f0fdf4; border: 2px solid #22c55e; border-radius: 10px; padding: 1rem; margin-top: 1rem; }
+    .try-box strong { color: #166534; }
+    .nav-links { display: flex; justify-content: space-between; margin-top: 1.5rem; }
+    .nav-links a { color: var(--accent); text-decoration: none; font-weight: 700; }
+    .congrats { background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 100%); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; text-align: center; }
+    .congrats strong { font-size: 1.1rem; color: #4338ca; }
+    .practice-section { border: 2px solid #22c55e; background: #f0fdf4; }
+    .practice-section h2 { color: #166534; }
+    .practice-section .task { margin: 0.75rem 0; padding-left: 1rem; border-left: 4px solid #22c55e; }
+    .deep-section { border: 2px solid #7c3aed; background: #f5f3ff; }
+    .deep-section h2 { color: #5b21b6; }
+    pre[class*="language-"] { margin: 1rem 0; border-radius: 10px; }
+    code[class*="language-"] { font-size: 0.9rem; }
+    .practice-editor-section { border: 2px solid #0ea5e9; background: #f0f9ff; border-radius: 12px; padding: 1rem; margin: 1rem 0; }
+    .practice-editor-section h3 { font-size: 1rem; color: #0369a1; margin-bottom: 0.5rem; }
+    .editor-toolbar { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+    .editor-toolbar button { padding: 0.4rem 0.8rem; border-radius: 8px; border: 1px solid #0ea5e9; background: #fff; color: #0369a1; font-weight: 700; cursor: pointer; }
+    .editor-toolbar button:hover { background: #e0f2fe; }
+    .editor-wrap { border: 1px solid #94a3b8; border-radius: 8px; overflow: hidden; }
+    .editor-wrap .CodeMirror { min-height: 220px; font-size: 14px; }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/tomorrow-night-eighties.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="back"><a href="index.html">← 목록으로</a></div>
+    <h1>🚀 5단계: 포인터 활용하기</h1>
+
+    <div class="section">
+      <h2>배열과 포인터</h2>
+      <p>배열은 메모리에 연속으로 붙어 있는 “방들”이에요. 배열 이름은 사실 “첫 번째 방의 주소”를 가리켜요. 그래서 배열 이름을 포인터처럼 쓸 수 있어요.</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int arr[3] = { 10, 20, 30 };
+    int *p = arr;   /* arr은 첫 번째 칸의 주소 */
+
+    printf("arr[0]: %d, *p: %d\n", arr[0], *p);
+    printf("arr[1]: %d, *(p+1): %d\n", arr[1], *(p+1));
+    return 0;
+}</code></pre>
+      <p><code>p</code>가 첫 번째 칸을 가리키고, <code>p+1</code>은 다음 칸(두 번째)을 가리켜요. 그래서 <code>*(p+1)</code>은 arr[1]과 같아요.</p>
+    </div>
+
+    <div class="section">
+      <h2>함수에서 포인터 쓰기</h2>
+      <p>함수에 “값”을 넘기면 복사만 되고, 원래 변수는 안 바뀌어요. “주소”를 넘기면 함수 안에서 그 주소의 값을 바꿀 수 있어요.</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+void 더하기_하다(int *p) {
+    *p = *p + 5;   /* p가 가리키는 곳의 값을 5 증가 */
+}
+
+int main() {
+    int num = 10;
+    printf("전: %d\n", num);
+    더하기_하다(&num);   /* num의 주소를 넘김 */
+    printf("후: %d\n", num);   /* 15가 됨 */
+    return 0;
+}</code></pre>
+      <p><code>&amp;num</code>으로 주소를 넘기니까, 함수 안에서 <code>*p</code>로 그 방의 값을 바꿀 수 있어요. 그래서 <code>num</code>이 15가 돼요.</p>
+    </div>
+
+    <div class="section">
+      <h2>✅ 5단계 정리</h2>
+      <ul>
+        <li>배열 이름 = 첫 번째 칸의 주소 → 포인터에 넣어서 <code>*(p+i)</code>처럼 쓸 수 있어요.</li>
+        <li>함수에 주소(<code>&amp;변수</code>)를 넘기면, 함수 안에서 포인터로 그 변수의 값을 바꿀 수 있어요.</li>
+        <li>포인터는 “어디에 있는지”를 알려 주고, 그곳의 값을 읽거나 쓸 수 있게 해요.</li>
+      </ul>
+    </div>
+
+    <div class="congrats">
+      <strong>🎉 5단계까지 완료했어요!</strong><br>
+      이제 “주소”와 “포인터”의 기본을 알게 되었어요. 더 공부하고 싶다면 “포인터와 배열”, “동적 메모리” 같은 걸 찾아 보세요.
+    </div>
+
+    <div class="section practice-section">
+      <h2>📋 실습 과제</h2>
+      <div class="task">
+        <strong>과제 1</strong>
+        배열 <code>arr[] = { 10, 20, 30 }</code>을 포인터 <code>p</code>로 받아서, <code>for</code> 반복문으로 <code>*(p+i)</code>를 사용해 모든 원소를 한 줄에 출력하세요.
+      </div>
+      <div class="practice-editor-section">
+        <h3>✏️ 여기서 직접 실습해 보세요</h3>
+        <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">아래 창에서 코드를 수정한 뒤 [포맷]으로 정리하고 [복사]로 붙여 넣어 온라인 컴파일러에서 실행하세요.</p>
+        <div class="editor-toolbar">
+          <button type="button" id="practice-format">포맷</button>
+          <button type="button" id="practice-copy">복사</button>
+        </div>
+        <div class="editor-wrap">
+          <textarea id="practice-code">#include &lt;stdio.h&gt;
+
+int main() {
+int arr[3] = { 10, 20, 30 };
+int *p = arr;
+for (int i = 0; i < 3; i++)
+printf("%d ", *(p + i));
+printf("\n");
+return 0;
+}</textarea>
+        </div>
+      </div>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int arr[3] = { 10, 20, 30 };
+    int *p = arr;
+    for (int i = 0; i < 3; i++)
+        printf("%d ", *(p + i));
+    printf("\n");
+    return 0;
+}</code></pre>
+      <div class="task">
+        <strong>과제 2</strong>
+        정수 배열의 합을 구하는 함수 <code>sum_arr(int *p, int n)</code>을 만드세요. <code>main</code>에서 배열을 선언하고 <code>sum_arr(arr, 3)</code>을 호출해 합을 출력하세요.
+      </div>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+int sum_arr(int *p, int n) {
+    int sum = 0;
+    for (int i = 0; i < n; i++)
+        sum += *(p + i);
+    return sum;
+}
+
+int main() {
+    int arr[3] = { 10, 20, 30 };
+    printf("합: %d\n", sum_arr(arr, 3));
+    return 0;
+}</code></pre>
+    </div>
+
+    <div class="section deep-section">
+      <h2>🔬 심화 학습</h2>
+      <p><strong>포인터 연산: p+1이 실제로 더해지는 값</strong></p>
+      <p><code>int *p</code>일 때 <code>p+1</code>은 “다음 정수”를 가리켜요. 정수는 4바이트이므로, 실제 주소에는 4가 더해져요. 컴파일러가 자동으로 계산해 줍니다.</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int arr[3] = { 10, 20, 30 };
+    int *p = arr;
+    printf("p   주소: %p\n", (void*)p);
+    printf("p+1 주소: %p\n", (void*)(p+1));
+    printf("p+2 주소: %p\n", (void*)(p+2));
+    return 0;
+}</code></pre>
+      <p><strong>이중 포인터 맛보기</strong></p>
+      <p><code>int **pp</code>는 “정수 포인터의 주소”를 저장해요. 즉, 포인터를 가리키는 포인터예요. 나중에 동적 메모리나 함수에서 포인터를 바꿀 때 쓰게 됩니다.</p>
+    </div>
+
+    <div class="nav-links">
+      <a href="stage4.html">← 4단계</a>
+      <a href="index.html">목록으로</a>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+  <script src="practice-editor.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', function () { window.PracticeEditor.init('practice-code', 'practice'); });</script>
+</body>
+</html>

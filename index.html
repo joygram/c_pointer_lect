@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🪄 C 포인터 쉽게 배우기 - 5단계 강의</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0f4ff;
+      --card: #fff;
+      --accent: #5b7cff;
+      --accent2: #ff9f5b;
+      --text: #2d3748;
+      --shadow: 0 4px 20px rgba(91, 124, 255, 0.15);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: linear-gradient(135deg, #e8eeff 0%, #f5e6ff 100%);
+      min-height: 100vh;
+      color: var(--text);
+      padding: 2rem;
+    }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 {
+      font-family: 'Jua', sans-serif;
+      font-size: 2.2rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+    .intro {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+    .intro p { margin-bottom: 0.5rem; }
+    .stages {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    a.stage-card {
+      display: block;
+      background: var(--card);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-left: 5px solid var(--accent);
+    }
+    a.stage-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(91, 124, 255, 0.25);
+    }
+    .stage-num {
+      font-family: 'Jua', sans-serif;
+      color: var(--accent);
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+    .stage-title { font-weight: 700; font-size: 1.15rem; margin-bottom: 0.25rem; }
+    .stage-desc { font-size: 0.9rem; color: #555; }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🪄 C 포인터 쉽게 배우기</h1>
+    <p class="subtitle">초등학생도 이해할 수 있는 5단계 온라인 강의</p>
+
+    <div class="intro">
+      <p>포인터는 C 언어에서 <strong>‘어디에 저장되어 있는지’</strong>를 가리키는 도구예요. 우편함 번호처럼 ‘몇 번 방에 있는지’만 알면 그 안에 있는 값을 찾을 수 있어요.</p>
+      <p>아래 5단계를 순서대로 따라 하면 포인터를 쉽게 이해할 수 있어요. 각 단계마다 <strong>개념 설명</strong>, <strong>📋 실습 과제</strong>(구체적인 문제와 참고 정답 코드), <strong>🔬 심화 학습</strong>이 모두 그 페이지 안에 들어 있어요. 코드는 문법 하이라이트와 줄 번호로 읽기 쉽게 표시돼요.</p>
+      <p><strong>✏️ 실습 코드창:</strong> 각 단계의 과제 바로 아래에 <strong>실습할 수 있는 코드 편집창</strong>이 있어요. 모바일에서도 앱을 왔다 갔다 하지 않고 같은 화면에서 코드를 쓰고, <strong>[포맷]</strong> 버튼으로 자동 정리·<strong>[복사]</strong> 버튼으로 복사할 수 있어요. 에디터에서 포커스를 잃을 때(다른 곳을 눌렀을 때) <strong>자동 포맷(오토 포맷)</strong>도 적용돼요.</p>
+    </div>
+
+    <nav class="stages">
+      <a class="stage-card" href="stage1.html">
+        <span class="stage-num">1단계 📬</span>
+        <span class="stage-title">주소가 뭐예요?</span>
+        <span class="stage-desc">우편함 비유로 ‘주소’ 개념을 이해해요.</span>
+      </a>
+      <a class="stage-card" href="stage2.html">
+        <span class="stage-num">2단계 📦</span>
+        <span class="stage-title">변수와 주소</span>
+        <span class="stage-desc">변수는 메모리 어딘가에 있고, 그곳에 ‘주소’가 있어요.</span>
+      </a>
+      <a class="stage-card" href="stage3.html">
+        <span class="stage-num">3단계 🎯</span>
+        <span class="stage-title">포인터 변수</span>
+        <span class="stage-desc">주소를 저장하는 특별한 변수, 포인터를 배워요.</span>
+      </a>
+      <a class="stage-card" href="stage4.html">
+        <span class="stage-num">4단계 ✏️</span>
+        <span class="stage-title">포인터로 값 바꾸기</span>
+        <span class="stage-desc">포인터를 이용해서 다른 변수의 값을 바꿔요.</span>
+      </a>
+      <a class="stage-card" href="stage5.html">
+        <span class="stage-num">5단계 🚀</span>
+        <span class="stage-title">포인터 활용하기</span>
+        <span class="stage-desc">배열, 함수에서 포인터를 어떻게 쓰는지 알아봐요.</span>
+      </a>
+    </nav>
+
+    <footer>각 단계의 코드는 페이지에 그대로 있어요. 복사해서 온라인 C 컴파일러에서 실행해 보세요. (iframe 없이 모든 내용이 해당 페이지에 임베드되어 있습니다.)</footer>
+  </div>
+</body>
+</html>

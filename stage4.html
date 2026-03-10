@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4단계 - 포인터로 값 바꾸기 | C 포인터 쉽게 배우기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #f0f4ff; --card: #fff; --accent: #5b7cff; --text: #2d3748; --shadow: 0 4px 20px rgba(91, 124, 255, 0.15); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); padding: 2rem; }
+    .container { max-width: 700px; margin: 0 auto; }
+    .back { margin-bottom: 1rem; }
+    .back a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+    h1 { font-family: 'Jua', sans-serif; font-size: 1.8rem; color: var(--accent); margin-bottom: 1rem; }
+    .section { background: var(--card); border-radius: 16px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+    .section h2 { font-size: 1.15rem; margin-bottom: 0.75rem; color: #444; }
+    .section p, .section li { line-height: 1.75; margin-bottom: 0.5rem; }
+    code { font-family: 'Consolas', 'Monaco', monospace; }
+    .try-box { background: #f0fdf4; border: 2px solid #22c55e; border-radius: 10px; padding: 1rem; margin-top: 1rem; }
+    .try-box strong { color: #166534; }
+    .nav-links { display: flex; justify-content: space-between; margin-top: 1.5rem; }
+    .nav-links a { color: var(--accent); text-decoration: none; font-weight: 700; }
+    .practice-section { border: 2px solid #22c55e; background: #f0fdf4; }
+    .practice-section h2 { color: #166534; }
+    .practice-section .task { margin: 0.75rem 0; padding-left: 1rem; border-left: 4px solid #22c55e; }
+    .deep-section { border: 2px solid #7c3aed; background: #f5f3ff; }
+    .deep-section h2 { color: #5b21b6; }
+    pre[class*="language-"] { margin: 1rem 0; border-radius: 10px; }
+    code[class*="language-"] { font-size: 0.9rem; }
+    .practice-editor-section { border: 2px solid #0ea5e9; background: #f0f9ff; border-radius: 12px; padding: 1rem; margin: 1rem 0; }
+    .practice-editor-section h3 { font-size: 1rem; color: #0369a1; margin-bottom: 0.5rem; }
+    .editor-toolbar { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+    .editor-toolbar button { padding: 0.4rem 0.8rem; border-radius: 8px; border: 1px solid #0ea5e9; background: #fff; color: #0369a1; font-weight: 700; cursor: pointer; }
+    .editor-toolbar button:hover { background: #e0f2fe; }
+    .editor-wrap { border: 1px solid #94a3b8; border-radius: 8px; overflow: hidden; }
+    .editor-wrap .CodeMirror { min-height: 200px; font-size: 14px; }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/tomorrow-night-eighties.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="back"><a href="index.html">← 목록으로</a></div>
+    <h1>✏️ 4단계: 포인터로 값 바꾸기</h1>
+
+    <div class="section">
+      <h2>포인터로 “그 방”의 값을 바꿀 수 있어요</h2>
+      <p>포인터 <code>p</code>가 변수 <code>a</code>를 가리키고 있을 때, <code>*p = 100;</code>이라고 쓰면 <strong>p가 가리키는 곳(a가 있는 방)</strong>에 100을 넣는 거예요. 그래서 <code>a</code>의 값이 100으로 바뀌어요!</p>
+      <p>우편함 비유로 말하면, “103호 우편함에 새 편지를 넣는다”와 같아요. 103호(주소)를 알고 있으니까 그 안의 내용(값)을 바꿀 수 있는 거죠.</p>
+    </div>
+
+    <div class="section">
+      <h2>코드로 확인하기</h2>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10;
+    int *p = &a;
+
+    printf("바꾸기 전 a: %d\n", a);
+
+    *p = 100;   /* p가 가리키는 곳(a)에 100 넣기 */
+    printf("바꾼 후 a: %d\n", a);
+
+    return 0;
+}</code></pre>
+      <p>실행하면 “바꾸기 전 a: 10”, “바꾼 후 a: 100”처럼 나와요. <code>a = 100;</code>이라고 직접 쓰지 않았는데도 <code>a</code>가 바뀌는 이유는, <code>*p</code>가 “a가 있는 그 방”을 가리키기 때문이에요.</p>
+    </div>
+
+    <div class="section">
+      <h2>왜 이게 유용할까요?</h2>
+      <p>나중에 함수를 배우면, “함수 안에서 다른 변수의 값을 바꾸고 싶을 때” 포인터를 쓰게 돼요. 지금은 “포인터를 통하면 그 주소에 있는 값을 읽고 쓸 수 있다”만 기억하면 돼요.</p>
+    </div>
+
+    <div class="section">
+      <h2>✅ 4단계 정리</h2>
+      <ul>
+        <li><code>*p = 값;</code> → p가 가리키는 곳에 그 값을 넣어요.</li>
+        <li>그래서 원래 변수 <code>a</code>의 값이 바뀌어요.</li>
+        <li>포인터는 “그 방의 주소”를 알고 있으니까, 그 방의 내용을 바꿀 수 있어요.</li>
+      </ul>
+    </div>
+
+    <div class="section practice-section">
+      <h2>📋 실습 과제</h2>
+      <div class="task">
+        <strong>과제 1</strong>
+        <code>*p = *p + 5;</code>를 사용해서 <code>a</code>의 값을 5만큼 늘려 보세요. 바꾼 뒤 <code>a</code>를 출력하면 105가 나와야 해요.
+      </div>
+      <div class="practice-editor-section">
+        <h3>✏️ 여기서 직접 실습해 보세요</h3>
+        <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">아래 창에서 코드를 수정한 뒤 [포맷]으로 정리하고 [복사]로 붙여 넣어 온라인 컴파일러에서 실행하세요.</p>
+        <div class="editor-toolbar">
+          <button type="button" id="practice-format">포맷</button>
+          <button type="button" id="practice-copy">복사</button>
+        </div>
+        <div class="editor-wrap">
+          <textarea id="practice-code">#include &lt;stdio.h&gt;
+
+int main() {
+int a = 10;
+int *p = &a;
+*p = 100;
+*p = *p + 5;
+printf("a: %d\n", a);
+return 0;
+}</textarea>
+        </div>
+      </div>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10;
+    int *p = &a;
+    *p = 100;
+    *p = *p + 5;
+    printf("a: %d\n", a);   /* 105 */
+    return 0;
+}</code></pre>
+      <div class="task">
+        <strong>과제 2 (스왑)</strong>
+        두 변수 <code>x</code>, <code>y</code>의 값을 포인터만 사용해서 서로 바꾸는 프로그램을 작성하세요. (임시 변수 없이 <code>*p</code>, <code>*q</code>와 하나의 임시 변수만 사용해도 됩니다.)
+      </div>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int x = 5, y = 10;
+    int *p = &x, *q = &y;
+    int temp = *p;
+    *p = *q;
+    *q = temp;
+    printf("x=%d, y=%d\n", x, y);   /* x=10, y=5 */
+    return 0;
+}</code></pre>
+    </div>
+
+    <div class="section deep-section">
+      <h2>🔬 심화 학습</h2>
+      <p><strong>함수로 두 변수 스왑하기 (call by pointer)</strong></p>
+      <p>함수에 “값”을 넘기면 복사만 되므로 함수 안에서 바꿔도 원래 변수는 안 바뀌어요. “주소”를 넘기면 함수 안에서 그 주소의 값을 바꿀 수 있어요.</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+void swap(int *p, int *q) {
+    int temp = *p;
+    *p = *q;
+    *q = temp;
+}
+
+int main() {
+    int x = 5, y = 10;
+    printf("전: x=%d, y=%d\n", x, y);
+    swap(&x, &y);
+    printf("후: x=%d, y=%d\n", x, y);
+    return 0;
+}</code></pre>
+      <p><code>swap(&amp;x, &amp;y)</code>처럼 주소를 넘기면, 함수 안의 <code>*p</code>, <code>*q</code>가 실제 x, y가 있는 “방”을 가리키므로 값이 바뀌어요.</p>
+    </div>
+
+    <div class="nav-links">
+      <a href="stage3.html">← 3단계</a>
+      <a href="stage5.html">5단계: 포인터 활용하기 →</a>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+  <script src="practice-editor.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', function () { window.PracticeEditor.init('practice-code', 'practice'); });</script>
+</body>
+</html>
