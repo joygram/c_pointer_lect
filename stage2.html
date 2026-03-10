@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2단계 - 변수와 주소 | C 포인터 쉽게 배우기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #f0f4ff; --card: #fff; --accent: #5b7cff; --text: #2d3748; --shadow: 0 4px 20px rgba(91, 124, 255, 0.15); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); min-height: 100vh; color: var(--text); padding: 2rem; }
+    .container { max-width: 700px; margin: 0 auto; }
+    .back { margin-bottom: 1rem; }
+    .back a { color: var(--accent); text-decoration: none; font-size: 0.95rem; }
+    h1 { font-family: 'Jua', sans-serif; font-size: 1.8rem; color: var(--accent); margin-bottom: 1rem; }
+    .section { background: var(--card); border-radius: 16px; padding: 1.5rem; box-shadow: var(--shadow); margin-bottom: 1.5rem; }
+    .section h2 { font-size: 1.15rem; margin-bottom: 0.75rem; color: #444; }
+    .section p, .section li { line-height: 1.75; margin-bottom: 0.5rem; }
+    code { font-family: 'Consolas', 'Monaco', monospace; }
+    .try-box { background: #f0fdf4; border: 2px solid #22c55e; border-radius: 10px; padding: 1rem; margin-top: 1rem; }
+    .try-box strong { color: #166534; }
+    .nav-links { display: flex; justify-content: space-between; margin-top: 1.5rem; }
+    .nav-links a { color: var(--accent); text-decoration: none; font-weight: 700; }
+    .mem-picture { display: flex; gap: 0.5rem; margin: 1rem 0; flex-wrap: wrap; }
+    .mem-cell { border: 2px solid #333; border-radius: 8px; padding: 0.5rem 0.75rem; font-family: monospace; background: #fff8e1; }
+    .mem-cell .name { color: #1565c0; font-weight: bold; }
+    .mem-cell .addr { font-size: 0.8rem; color: #666; }
+    .mem-cell .val { color: #c62828; }
+    .practice-section { border: 2px solid #22c55e; background: #f0fdf4; }
+    .practice-section h2 { color: #166534; }
+    .practice-section .task { margin: 0.75rem 0; padding-left: 1rem; border-left: 4px solid #22c55e; }
+    .deep-section { border: 2px solid #7c3aed; background: #f5f3ff; }
+    .deep-section h2 { color: #5b21b6; }
+    pre[class*="language-"] { margin: 1rem 0; border-radius: 10px; }
+    code[class*="language-"] { font-size: 0.9rem; }
+    .practice-editor-section { border: 2px solid #0ea5e9; background: #f0f9ff; border-radius: 12px; padding: 1rem; margin: 1rem 0; }
+    .practice-editor-section h3 { font-size: 1rem; color: #0369a1; margin-bottom: 0.5rem; }
+    .editor-toolbar { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+    .editor-toolbar button { padding: 0.4rem 0.8rem; border-radius: 8px; border: 1px solid #0ea5e9; background: #fff; color: #0369a1; font-weight: 700; cursor: pointer; }
+    .editor-toolbar button:hover { background: #e0f2fe; }
+    .editor-wrap { border: 1px solid #94a3b8; border-radius: 8px; overflow: hidden; }
+    .editor-wrap .CodeMirror { min-height: 200px; font-size: 14px; }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/tomorrow-night-eighties.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="back"><a href="index.html">← 목록으로</a></div>
+    <h1>📦 2단계: 변수와 주소</h1>
+
+    <div class="section">
+      <h2>변수는 메모리 한 칸에 있어요</h2>
+      <p><code>int a = 10;</code>이라고 쓰면, 컴퓨터는 메모리 어딘가에 빈 방 하나를 잡고, 그 방에 <strong>10</strong>을 넣어요. 그 방에는 반드시 <strong>주소</strong>가 있어요.</p>
+      <div class="mem-picture">
+        <div class="mem-cell"><span class="name">a</span><br><span class="addr">주소: 0x1000</span><br><span class="val">값: 10</span></div>
+      </div>
+      <p>우리가 변수 이름 <code>a</code>만 쓰면 → 그 방에 있는 <strong>값(10)</strong>을 쓰는 거고,<br>
+      <strong>주소를 알고 싶다면</strong> → C 언어에서는 <code>&a</code>라고 쓰면 돼요. <code>&</code>는 “그 변수의 주소를 달라”라는 뜻이에요.</p>
+    </div>
+
+    <div class="section">
+      <h2>주소를 출력해 보기</h2>
+      <p>아래 코드를 복사해서 온라인 C 컴파일러에 붙여 넣고 실행해 보세요.</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10;
+    printf("변수 a에 들어 있는 값: %d\n", a);
+    printf("변수 a가 있는 곳의 주소: %p\n", (void*)&a);
+    return 0;
+}</code></pre>
+      <p><code>%d</code>는 숫자(값), <code>%p</code>는 주소를 출력할 때 써요. 실행할 때마다 주소가 다르게 나올 수 있어요. 그게 정상이에요!</p>
+    </div>
+
+    <div class="section">
+      <h2>✅ 2단계 정리</h2>
+      <ul>
+        <li>변수는 메모리 한 칸을 차지하고, 그 칸에는 <strong>주소</strong>와 <strong>값</strong>이 있어요.</li>
+        <li><code>&amp;변수이름</code> → 그 변수가 있는 <strong>주소</strong>를 가져와요.</li>
+        <li>주소를 출력할 때는 <code>printf</code>에서 <code>%p</code>를 써요.</li>
+      </ul>
+    </div>
+
+    <div class="section practice-section">
+      <h2>📋 실습 과제</h2>
+      <div class="task">
+        <strong>과제 1</strong>
+        변수 <code>a</code>, <code>b</code>, <code>c</code>를 각각 10, 20, 30으로 선언한 뒤, 세 변수의 <strong>값</strong>과 <strong>주소</strong>를 모두 출력하는 프로그램을 작성하세요.
+      </div>
+      <div class="practice-editor-section">
+        <h3>✏️ 여기서 직접 실습해 보세요</h3>
+        <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">아래 창에서 코드를 수정한 뒤 [포맷]으로 정리하고 [복사]로 붙여 넣어 온라인 컴파일러에서 실행하세요.</p>
+        <div class="editor-toolbar">
+          <button type="button" id="practice-format">포맷</button>
+          <button type="button" id="practice-copy">복사</button>
+        </div>
+        <div class="editor-wrap">
+          <textarea id="practice-code">#include &lt;stdio.h&gt;
+
+int main() {
+int a = 10, b = 20, c = 30;
+printf("a: 값=%d, 주소=%p\n", a, (void*)&a);
+printf("b: 값=%d, 주소=%p\n", b, (void*)&b);
+printf("c: 값=%d, 주소=%p\n", c, (void*)&c);
+return 0;
+}</textarea>
+        </div>
+      </div>
+      <p><strong>참고 정답 코드</strong> (복사해서 실행해 보세요)</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10, b = 20, c = 30;
+    printf("a: 값=%d, 주소=%p\n", a, (void*)&a);
+    printf("b: 값=%d, 주소=%p\n", b, (void*)&b);
+    printf("c: 값=%d, 주소=%p\n", c, (void*)&c);
+    return 0;
+}</code></pre>
+      <div class="task">
+        <strong>과제 2</strong>
+        위 프로그램에서 <code>a</code>와 <code>b</code>의 주소가 같은지 다른지 <code>if</code>로 비교해 보세요. (<code>&a == &b</code>를 사용하면 됩니다.)
+      </div>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10, b = 20;
+    if (&a == &b)
+        printf("a와 b의 주소가 같습니다.\n");
+    else
+        printf("a와 b의 주소가 다릅니다.\n");
+    return 0;
+}</code></pre>
+    </div>
+
+    <div class="section deep-section">
+      <h2>🔬 심화 학습</h2>
+      <p><strong>sizeof로 변수 크기 알아보기</strong></p>
+      <p><code>sizeof(변수)</code>는 그 변수가 메모리에서 차지하는 <strong>바이트 수</strong>를 알려 줘요. <code>int</code>는 보통 4바이트예요. 주소끼리 빼면 “몇 칸 떨어져 있는지”를 알 수 있어요.</p>
+      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10, b = 20;
+    printf("int 크기: %zu 바이트\n", sizeof(int));
+    printf("a 주소: %p, b 주소: %p\n", (void*)&a, (void*)&b);
+    /* (b 주소 - a 주소)는 컴파일러마다 다를 수 있음 */
+    return 0;
+}</code></pre>
+      <p><strong>정리:</strong> 변수마다 고유한 주소가 있고, <code>%p</code>로 그 주소를 볼 수 있어요. 다음 단계에서는 이 주소를 저장하는 “포인터”를 배워요.</p>
+    </div>
+
+    <div class="nav-links">
+      <a href="stage1.html">← 1단계</a>
+      <a href="stage3.html">3단계: 포인터 변수 →</a>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+  <script src="practice-editor.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', function () { window.PracticeEditor.init('practice-code', 'practice'); });</script>
+</body>
+</html>
