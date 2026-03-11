@@ -111,30 +111,27 @@ int main() {
       </div>
       <div class="practice-editor-section">
         <h3>✏️ 여기서 직접 실습해 보세요</h3>
-        <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">아래 창에서 코드를 수정한 뒤 [포맷]으로 정리하고 [복사]로 붙여 넣어 온라인 컴파일러에서 실행하세요.</p>
+        <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">모바일에서도 이 창에서 수정·포맷·실행·복사할 수 있어요. [실행]으로 바로 결과를 볼 수 있습니다.</p>
         <div class="editor-toolbar">
           <button type="button" id="practice-format">포맷</button>
           <button type="button" id="practice-run">실행</button>
-          <button type="button" id="practice-embed-run">아래에서 실행</button>
           <button type="button" id="practice-copy">복사</button>
         </div>
         <div class="editor-wrap">
           <textarea id="practice-code">#include &lt;stdio.h&gt;
 
 int main() {
-int arr[3] = { 10, 20, 30 };
-int *p = arr;
-for (int i = 0; i < 3; i++)
-printf("%d ", *(p + i));
-printf("\n");
-return 0;
+    int arr[3] = { 10, 20, 30 };
+    int *p = arr;
+    // 기능 추가: for 반복문으로 *(p+i)를 사용해 모든 원소를 한 줄에 출력하세요.
+    printf("\n");
+    return 0;
 }</textarea>
         </div>
         <div id="practice-result" class="practice-result" aria-live="polite"></div>
-        <p style="font-size:0.85rem; color:#666; margin-top:0.75rem;">네트워크/CORS로 실행이 안 되면 [아래에서 실행]을 누르면 아래 C 컴파일러에 코드가 전달됩니다. 그 다음 [Run]을 누르면 됩니다.</p>
-        <iframe id="practice-compiler-embed" title="C 컴파일러" style="width:100%; height:400px; border:1px solid #94a3b8; border-radius:8px; margin-top:0.5rem;" src="https://onecompiler.com/embed/c?listenToEvents=true&amp;hideLanguageSelection=true"></iframe>
-      </div>
-      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+        <details style="margin-top:0.75rem;">
+          <summary style="cursor:pointer; font-weight:700; color:#0369a1;">참고 정답 코드 (클릭하여 펼치기)</summary>
+          <pre class="answer-code-block line-numbers" style="margin-top:0.5rem;"><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int arr[3] = { 10, 20, 30 };
@@ -144,11 +141,16 @@ int main() {
     printf("\n");
     return 0;
 }</code></pre>
+          <button type="button" class="copy-answer-to-editor" style="margin-top:0.5rem; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid #0ea5e9; background:#fff; color:#0369a1; font-weight:700; cursor:pointer;">에디터로 복사</button>
+        </details>
+      </div>
       <div class="task">
         <strong>과제 2</strong>
         정수 배열의 합을 구하는 함수 <code>sum_arr(int *p, int n)</code>을 만드세요. <code>main</code>에서 배열을 선언하고 <code>sum_arr(arr, 3)</code>을 호출해 합을 출력하세요.
       </div>
-      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+      <details style="margin-top:0.5rem;">
+        <summary style="cursor:pointer; font-weight:700; color:#0369a1;">과제 2 참고 정답 코드 (클릭하여 펼치기)</summary>
+        <pre class="answer-code-block line-numbers" style="margin-top:0.5rem;"><code class="language-c">#include &lt;stdio.h&gt;
 
 int sum_arr(int *p, int n) {
     int sum = 0;
@@ -162,13 +164,17 @@ int main() {
     printf("합: %d\n", sum_arr(arr, 3));
     return 0;
 }</code></pre>
+        <button type="button" class="copy-answer-to-editor" style="margin-top:0.5rem; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid #0ea5e9; background:#fff; color:#0369a1; font-weight:700; cursor:pointer;">에디터로 복사</button>
+      </details>
     </div>
 
     <div class="section deep-section">
       <h2>🔬 심화 학습</h2>
       <p><strong>포인터 연산: p+1이 실제로 더해지는 값</strong></p>
       <p><code>int *p</code>일 때 <code>p+1</code>은 “다음 정수”를 가리켜요. 정수는 4바이트이므로, 실제 주소에는 4가 더해져요. 컴파일러가 자동으로 계산해 줍니다.</p>
-      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+      <details style="margin-top:0.5rem;">
+        <summary style="cursor:pointer; font-weight:700; color:#5b21b6;">심화 참고 코드 (클릭하여 펼치기)</summary>
+        <pre class="answer-code-block line-numbers" style="margin-top:0.5rem;"><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int arr[3] = { 10, 20, 30 };
@@ -178,6 +184,8 @@ int main() {
     printf("p+2 주소: %p\n", (void*)(p+2));
     return 0;
 }</code></pre>
+        <button type="button" class="copy-answer-to-editor" style="margin-top:0.5rem; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid #7c3aed; background:#fff; color:#5b21b6; font-weight:700; cursor:pointer;">에디터로 복사</button>
+      </details>
       <p><strong>이중 포인터 맛보기</strong></p>
       <p><code>int **pp</code>는 “정수 포인터의 주소”를 저장해요. 즉, 포인터를 가리키는 포인터예요. 나중에 동적 메모리나 함수에서 포인터를 바꿀 때 쓰게 됩니다.</p>
     </div>

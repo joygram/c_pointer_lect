@@ -83,27 +83,6 @@
         });
       });
     }
-    var embedIframe = document.getElementById(toolbarId + '-compiler-embed');
-    if (embedIframe) {
-      var embedBtn = document.getElementById(toolbarId + '-embed-run');
-      if (embedBtn) {
-        embedBtn.addEventListener('click', function () {
-          var code = editor.getValue();
-          try {
-            embedIframe.contentWindow.postMessage({
-              eventType: 'populateCode',
-              language: 'c',
-              files: [{ name: 'main.c', content: code }]
-            }, 'https://onecompiler.com');
-            resultBox.textContent = '아래 컴파일러에 코드를 보냈어요. [Run]을 눌러 실행하세요.';
-            if (resultBox) resultBox.className = toolbarId + '-result ok';
-          } catch (e) {
-            if (resultBox) resultBox.textContent = '아래 컴파일러가 로드된 뒤 다시 시도하세요.';
-            if (resultBox) resultBox.className = toolbarId + '-result error';
-          }
-        });
-      }
-    }
     if (runBtn && resultBox) {
       runBtn.addEventListener('click', function () {
         var code = editor.getValue();
@@ -115,7 +94,13 @@
         runBtn.disabled = true;
         resultBox.textContent = '실행 중…';
         resultBox.className = toolbarId + '-result running';
-        var runUrl = 'https://ce.judge0.com/submissions?base64_encoded=false&wait=true';
+        var runUrl = 'https://ce.judge0.com/submissions?base64_encoded=true&wait=true';
+        var base64Code;
+        try {
+          base64Code = btoa(unescape(encodeURIComponent(code)));
+        } catch (e) {
+          base64Code = btoa(code);
+        }
         fetch(runUrl, {
           method: 'POST',
           headers: {
@@ -123,7 +108,7 @@
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            source_code: code,
+            source_code: base64Code,
             language_id: 50,
             stdin: ''
           })
@@ -132,14 +117,14 @@
             return res.json().then(function (data) {
               if (res.status === 401) {
                 runBtn.disabled = false;
-                resultBox.textContent = '실행 서비스 인증 필요(401).\n→ [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
+                resultBox.textContent = '실행 서비스 인증 필요(401). [복사]한 뒤 온라인 C 컴파일러에서 실행해 보세요.';
                 resultBox.className = toolbarId + '-result error';
                 return Promise.reject(new Error('401'));
               }
               if (res.status === 400) {
                 runBtn.disabled = false;
                 var msg = (data && (data.error || data.message)) ? String(data.error || data.message) : '요청 형식 오류(400)';
-                resultBox.textContent = msg + '\n→ [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
+                resultBox.textContent = msg + '\n→ [복사]한 뒤 온라인 C 컴파일러에서 실행해 보세요.';
                 resultBox.className = toolbarId + '-result error';
                 return Promise.reject(new Error('400'));
               }
@@ -150,21 +135,29 @@
           .then(function (data) {
             if (!data) return;
             runBtn.disabled = false;
+            function decodeBase64(s) {
+              if (!s) return '';
+              try {
+                return decodeURIComponent(escape(atob(s)));
+              } catch (e) {
+                try { return atob(s); } catch (e2) { return s; }
+              }
+            }
             var out = '';
-            if (data.compile_output) out += '[컴파일]\n' + data.compile_output + '\n';
-            if (data.stdout) out += data.stdout;
-            if (data.stderr) out += data.stderr;
-            if (data.message) out += data.message;
+            if (data.compile_output) out += '[컴파일]\n' + decodeBase64(data.compile_output) + '\n';
+            if (data.stdout) out += decodeBase64(data.stdout);
+            if (data.stderr) out += decodeBase64(data.stderr);
+            if (data.message) out += decodeBase64(data.message);
             var ok = data.status && data.status.id === 3;
             if (!out.trim()) out = ok ? '(실행됨, 출력 없음)' : (data.status ? data.status.description : '') || '실행 실패';
-            if (!out.trim()) out += '\n→ [복사] 후 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
+            if (!out.trim()) out += '\n→ [복사]한 뒤 온라인 C 컴파일러에서 실행해 보세요.';
             resultBox.textContent = out.trim();
             resultBox.className = toolbarId + '-result ' + (ok ? 'ok' : 'error');
           })
           .catch(function (err) {
             runBtn.disabled = false;
             if (err && (err.message === '401' || err.message === '400')) return;
-            resultBox.textContent = '실행 실패 (네트워크 또는 CORS). [아래에서 실행]으로 아래 컴파일러에 코드를 보내거나, [복사] 후 programiz에서 실행해 보세요.';
+            resultBox.textContent = '실행 실패 (네트워크 또는 CORS). [복사]한 뒤 온라인 C 컴파일러에서 실행해 보세요.';
             resultBox.className = toolbarId + '-result error';
           });
       });
@@ -178,6 +171,21 @@
         var formatted = formatC(code);
         if (formatted !== code) editor.setValue(formatted);
       } catch (e) { /* 포맷 실패 시 원본 유지 */ }
+    });
+
+    /* 참고 정답 코드 "에디터로 복사" 버튼: 같은 details 안의 pre.answer-code-block 내용을 에디터에 넣음 */
+    document.querySelectorAll('.copy-answer-to-editor').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var details = btn.closest('details');
+        var pre = details ? details.querySelector('pre.answer-code-block') : null;
+        if (pre && editor) {
+          editor.setValue(pre.textContent.trim());
+          if (resultBox) {
+            resultBox.textContent = '참고 정답 코드를 에디터에 넣었어요. [실행]으로 확인해 보세요.';
+            resultBox.className = toolbarId + '-result ok';
+          }
+        }
+      });
     });
 
     return editor;

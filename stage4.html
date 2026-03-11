@@ -98,30 +98,28 @@ int main() {
       </div>
       <div class="practice-editor-section">
         <h3>✏️ 여기서 직접 실습해 보세요</h3>
-        <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">아래 창에서 코드를 수정한 뒤 [포맷]으로 정리하고 [복사]로 붙여 넣어 온라인 컴파일러에서 실행하세요.</p>
+        <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">모바일에서도 이 창에서 수정·포맷·실행·복사할 수 있어요. [실행]으로 바로 결과를 볼 수 있습니다.</p>
         <div class="editor-toolbar">
           <button type="button" id="practice-format">포맷</button>
           <button type="button" id="practice-run">실행</button>
-          <button type="button" id="practice-embed-run">아래에서 실행</button>
           <button type="button" id="practice-copy">복사</button>
         </div>
         <div class="editor-wrap">
           <textarea id="practice-code">#include &lt;stdio.h&gt;
 
 int main() {
-int a = 10;
-int *p = &a;
-*p = 100;
-*p = *p + 5;
-printf("a: %d\n", a);
-return 0;
+    int a = 10;
+    int *p = &a;
+    *p = 100;
+    // 기능 추가: *p = *p + 5; 로 a의 값을 5 늘린 뒤, a를 출력하면 105가 나와야 합니다.
+    printf("a: %d\n", a);
+    return 0;
 }</textarea>
         </div>
         <div id="practice-result" class="practice-result" aria-live="polite"></div>
-        <p style="font-size:0.85rem; color:#666; margin-top:0.75rem;">네트워크/CORS로 실행이 안 되면 [아래에서 실행]을 누르면 아래 C 컴파일러에 코드가 전달됩니다. 그 다음 [Run]을 누르면 됩니다.</p>
-        <iframe id="practice-compiler-embed" title="C 컴파일러" style="width:100%; height:400px; border:1px solid #94a3b8; border-radius:8px; margin-top:0.5rem;" src="https://onecompiler.com/embed/c?listenToEvents=true&amp;hideLanguageSelection=true"></iframe>
-      </div>
-      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+        <details style="margin-top:0.75rem;">
+          <summary style="cursor:pointer; font-weight:700; color:#0369a1;">참고 정답 코드 (클릭하여 펼치기)</summary>
+          <pre class="answer-code-block line-numbers" style="margin-top:0.5rem;"><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int a = 10;
@@ -131,11 +129,16 @@ int main() {
     printf("a: %d\n", a);   /* 105 */
     return 0;
 }</code></pre>
+          <button type="button" class="copy-answer-to-editor" style="margin-top:0.5rem; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid #0ea5e9; background:#fff; color:#0369a1; font-weight:700; cursor:pointer;">에디터로 복사</button>
+        </details>
+      </div>
       <div class="task">
         <strong>과제 2 (스왑)</strong>
         두 변수 <code>x</code>, <code>y</code>의 값을 포인터만 사용해서 서로 바꾸는 프로그램을 작성하세요. (임시 변수 없이 <code>*p</code>, <code>*q</code>와 하나의 임시 변수만 사용해도 됩니다.)
       </div>
-      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+      <details style="margin-top:0.5rem;">
+        <summary style="cursor:pointer; font-weight:700; color:#0369a1;">과제 2 참고 정답 코드 (클릭하여 펼치기)</summary>
+        <pre class="answer-code-block line-numbers" style="margin-top:0.5rem;"><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int x = 5, y = 10;
@@ -146,13 +149,17 @@ int main() {
     printf("x=%d, y=%d\n", x, y);   /* x=10, y=5 */
     return 0;
 }</code></pre>
+        <button type="button" class="copy-answer-to-editor" style="margin-top:0.5rem; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid #0ea5e9; background:#fff; color:#0369a1; font-weight:700; cursor:pointer;">에디터로 복사</button>
+      </details>
     </div>
 
     <div class="section deep-section">
       <h2>🔬 심화 학습</h2>
       <p><strong>함수로 두 변수 스왑하기 (call by pointer)</strong></p>
       <p>함수에 “값”을 넘기면 복사만 되므로 함수 안에서 바꿔도 원래 변수는 안 바뀌어요. “주소”를 넘기면 함수 안에서 그 주소의 값을 바꿀 수 있어요.</p>
-      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+      <details style="margin-top:0.5rem;">
+        <summary style="cursor:pointer; font-weight:700; color:#5b21b6;">심화 참고 코드 (클릭하여 펼치기)</summary>
+        <pre class="answer-code-block line-numbers" style="margin-top:0.5rem;"><code class="language-c">#include &lt;stdio.h&gt;
 
 void swap(int *p, int *q) {
     int temp = *p;
@@ -167,7 +174,9 @@ int main() {
     printf("후: x=%d, y=%d\n", x, y);
     return 0;
 }</code></pre>
-      <p><code>swap(&amp;x, &amp;y)</code>처럼 주소를 넘기면, 함수 안의 <code>*p</code>, <code>*q</code>가 실제 x, y가 있는 “방”을 가리키므로 값이 바뀌어요.</p>
+        <button type="button" class="copy-answer-to-editor" style="margin-top:0.5rem; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid #7c3aed; background:#fff; color:#5b21b6; font-weight:700; cursor:pointer;">에디터로 복사</button>
+      </details>
+      <p style="margin-top:0.5rem;"><code>swap(&amp;x, &amp;y)</code>처럼 주소를 넘기면, 함수 안의 <code>*p</code>, <code>*q</code>가 실제 x, y가 있는 “방”을 가리키므로 값이 바뀌어요.</p>
     </div>
 
     <div class="nav-links">
