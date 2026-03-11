@@ -77,8 +77,15 @@
 
     <div class="section">
       <h2>코드로 확인하기</h2>
-      <p>아래 코드를 복사해서 실행해 보세요.</p>
-      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+      <p>아래 코드를 [실행]으로 바로 실행해 보세요.</p>
+      <div class="practice-editor-section">
+        <div class="editor-toolbar">
+          <button type="button" id="practice-demo-format">포맷</button>
+          <button type="button" id="practice-demo-run">실행</button>
+          <button type="button" id="practice-demo-copy">복사</button>
+        </div>
+        <div class="editor-wrap">
+          <textarea id="practice-code-demo">#include &lt;stdio.h&gt;
 
 int main() {
     int a = 10;
@@ -89,7 +96,10 @@ int main() {
     printf("p가 가리키는 주소: %p\n", (void*)p);
     printf("p가 가리키는 곳의 값 (*p): %d\n", *p);
     return 0;
-}</code></pre>
+}</textarea>
+        </div>
+        <div id="practice-demo-result" class="practice-result" aria-live="polite"></div>
+      </div>
       <p><code>a</code>와 <code>*p</code>가 둘 다 10으로 나오고, <code>&amp;a</code>와 <code>p</code>가 같은 주소로 나오면 정확히 이해한 거예요!</p>
     </div>
 
@@ -146,9 +156,26 @@ int main() {
         <strong>과제 2</strong>
         포인터 <code>p</code>는 <code>a</code>를, 포인터 <code>q</code>는 <code>b</code>를 가리키게 한 뒤, <code>*p</code>, <code>*q</code>, <code>p</code>, <code>q</code>를 각각 출력해 보세요.
       </div>
-      <details style="margin-top:0.5rem;">
-        <summary style="cursor:pointer; font-weight:700; color:#0369a1;">과제 2 참고 정답 코드 (클릭하여 펼치기)</summary>
-        <pre class="answer-code-block line-numbers" style="margin-top:0.5rem;"><code class="language-c">#include &lt;stdio.h&gt;
+      <div class="practice-editor-section">
+        <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">여기서 직접 작성·실행해 보세요. [실행]으로 결과를 확인할 수 있어요.</p>
+        <div class="editor-toolbar">
+          <button type="button" id="practice-2-format">포맷</button>
+          <button type="button" id="practice-2-run">실행</button>
+          <button type="button" id="practice-2-copy">복사</button>
+        </div>
+        <div class="editor-wrap">
+          <textarea id="practice-code-2">#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10, b = 20;
+    // p는 a를, q는 b를 가리키게 한 뒤 *p, *q, p, q를 각각 출력하세요.
+    return 0;
+}</textarea>
+        </div>
+        <div id="practice-2-result" class="practice-result" aria-live="polite"></div>
+        <details style="margin-top:0.75rem;">
+          <summary style="cursor:pointer; font-weight:700; color:#0369a1;">과제 2 참고 정답 코드 (클릭하여 펼치기)</summary>
+          <pre class="answer-code-block line-numbers" style="margin-top:0.5rem;"><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int a = 10, b = 20;
@@ -157,8 +184,9 @@ int main() {
     printf("p = %p, q = %p\n", (void*)p, (void*)q);
     return 0;
 }</code></pre>
-        <button type="button" class="copy-answer-to-editor" style="margin-top:0.5rem; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid #0ea5e9; background:#fff; color:#0369a1; font-weight:700; cursor:pointer;">에디터로 복사</button>
-      </details>
+          <button type="button" class="copy-answer-to-editor" style="margin-top:0.5rem; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid #0ea5e9; background:#fff; color:#0369a1; font-weight:700; cursor:pointer;">에디터로 복사</button>
+        </details>
+      </div>
     </div>
 
     <div class="section deep-section">
@@ -193,6 +221,6 @@ int main() {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
   <script src="practice-editor.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', function () { window.PracticeEditor.init('practice-code', 'practice'); });</script>
+  <script>document.addEventListener('DOMContentLoaded', function () { window.PracticeEditor.init('practice-code-demo', 'practice-demo'); window.PracticeEditor.init('practice-code', 'practice'); window.PracticeEditor.init('practice-code-2', 'practice-2'); });</script>
 </body>
 </html>
