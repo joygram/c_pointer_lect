@@ -99,6 +99,30 @@
       </ul>
     </div>
 
+    <div class="section">
+      <h2>주소를 출력해 보기</h2>
+      <p>아래 코드에서 <strong>a</strong>는 변수 이름(정수 하나를 담는 공간)이에요. <code>a</code>는 그 안의 값, <code>&a</code>는 그 변수가 있는 주소예요. [실행]으로 바로 결과를 볼 수 있어요.</p>
+      <div class="practice-editor-section">
+        <div class="editor-toolbar">
+          <button type="button" id="practice-demo-format">포맷</button>
+          <button type="button" id="practice-demo-run">실행</button>
+          <button type="button" id="practice-demo-copy">복사</button>
+        </div>
+        <div class="editor-wrap">
+          <textarea id="practice-code-demo">#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10;   /* 변수 a에 10 저장 */
+    printf("변수 a에 들어 있는 값: %d\n", a);
+    printf("변수 a가 있는 곳의 주소: %p\n", (void*)&a);
+    return 0;
+}</textarea>
+        </div>
+        <div id="practice-demo-result" class="practice-result" aria-live="polite"></div>
+      </div>
+      <p><code>%d</code>는 숫자(값), <code>%p</code>는 주소를 출력할 때 써요. 실행할 때마다 주소가 다르게 나올 수 있어요. 그게 정상이에요!</p>
+    </div>
+
     <div class="section practice-section">
       <h2>📋 실습 과제</h2>
       <p>아래 과제를 순서대로 해 보세요. 답은 다음 단계에서 C 코드로 확인할 수 있어요.</p>
@@ -176,6 +200,7 @@ int main() {
   <script src="practice-editor.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      window.PracticeEditor.init('practice-code-demo', 'practice-demo');
       window.PracticeEditor.init('practice-code', 'practice');
     });
   </script>

@@ -70,14 +70,24 @@
     <div class="section">
       <h2>주소를 출력해 보기</h2>
       <p>아래 코드에서 <strong>a</strong>는 변수 이름(정수 하나를 담는 공간)이에요. <code>a</code>는 그 안의 값, <code>&a</code>는 그 변수가 있는 주소예요. [실행]으로 바로 결과를 볼 수 있어요.</p>
-      <pre class="line-numbers"><code class="language-c">#include &lt;stdio.h&gt;
+      <div class="practice-editor-section">
+        <div class="editor-toolbar">
+          <button type="button" id="practice-demo-format">포맷</button>
+          <button type="button" id="practice-demo-run">실행</button>
+          <button type="button" id="practice-demo-copy">복사</button>
+        </div>
+        <div class="editor-wrap">
+          <textarea id="practice-code-demo">#include &lt;stdio.h&gt;
 
 int main() {
     int a = 10;   /* 변수 a에 10 저장 */
     printf("변수 a에 들어 있는 값: %d\n", a);
     printf("변수 a가 있는 곳의 주소: %p\n", (void*)&a);
     return 0;
-}</code></pre>
+}</textarea>
+        </div>
+        <div id="practice-demo-result" class="practice-result" aria-live="polite"></div>
+      </div>
       <p><code>%d</code>는 숫자(값), <code>%p</code>는 주소를 출력할 때 써요. 실행할 때마다 주소가 다르게 나올 수 있어요. 그게 정상이에요!</p>
     </div>
 
@@ -132,9 +142,26 @@ int main() {
         <strong>과제 2</strong>
         위 프로그램에서 <code>a</code>와 <code>b</code>의 주소가 같은지 다른지 <code>if</code>로 비교해 보세요. (<code>&a == &b</code>를 사용하면 됩니다.)
       </div>
-      <details style="margin-top:0.5rem;">
-        <summary style="cursor:pointer; font-weight:700; color:#0369a1;">과제 2 참고 정답 코드 (클릭하여 펼치기)</summary>
-        <pre class="answer-code-block line-numbers" style="margin-top:0.5rem;"><code class="language-c">#include &lt;stdio.h&gt;
+      <div class="practice-editor-section">
+        <p style="font-size:0.9rem; color:#555; margin-bottom:0.5rem;">여기서 직접 작성·실행해 보세요. [실행]으로 결과를 확인할 수 있어요.</p>
+        <div class="editor-toolbar">
+          <button type="button" id="practice-2-format">포맷</button>
+          <button type="button" id="practice-2-run">실행</button>
+          <button type="button" id="practice-2-copy">복사</button>
+        </div>
+        <div class="editor-wrap">
+          <textarea id="practice-code-2">#include &lt;stdio.h&gt;
+
+int main() {
+    int a = 10, b = 20;
+    // if (&a == &b) 로 주소가 같은지 다른지 비교해 출력하세요.
+    return 0;
+}</textarea>
+        </div>
+        <div id="practice-2-result" class="practice-result" aria-live="polite"></div>
+        <details style="margin-top:0.75rem;">
+          <summary style="cursor:pointer; font-weight:700; color:#0369a1;">과제 2 참고 정답 코드 (클릭하여 펼치기)</summary>
+          <pre class="answer-code-block line-numbers" style="margin-top:0.5rem;"><code class="language-c">#include &lt;stdio.h&gt;
 
 int main() {
     int a = 10, b = 20;
@@ -144,8 +171,9 @@ int main() {
         printf("a와 b의 주소가 다릅니다.\n");
     return 0;
 }</code></pre>
-        <button type="button" class="copy-answer-to-editor" style="margin-top:0.5rem; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid #0ea5e9; background:#fff; color:#0369a1; font-weight:700; cursor:pointer;">에디터로 복사</button>
-      </details>
+          <button type="button" class="copy-answer-to-editor" style="margin-top:0.5rem; padding:0.4rem 0.8rem; border-radius:8px; border:1px solid #0ea5e9; background:#fff; color:#0369a1; font-weight:700; cursor:pointer;">에디터로 복사</button>
+        </details>
+      </div>
     </div>
 
     <div class="section deep-section">
@@ -179,6 +207,6 @@ int main() {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
   <script src="practice-editor.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', function () { window.PracticeEditor.init('practice-code', 'practice'); });</script>
+  <script>document.addEventListener('DOMContentLoaded', function () { window.PracticeEditor.init('practice-code-demo', 'practice-demo'); window.PracticeEditor.init('practice-code', 'practice'); window.PracticeEditor.init('practice-code-2', 'practice-2'); });</script>
 </body>
 </html>

@@ -95,11 +95,15 @@
         resultBox.textContent = '실행 중…';
         resultBox.className = toolbarId + '-result running';
         var runUrl = 'https://ce.judge0.com/submissions?base64_encoded=true&wait=true';
+        var normalized = code.replace(/\uFEFF/g, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
         var base64Code;
+        var base64Stdin;
         try {
-          base64Code = btoa(unescape(encodeURIComponent(code)));
+          base64Code = btoa(unescape(encodeURIComponent(normalized)));
+          base64Stdin = btoa(unescape(encodeURIComponent('')));
         } catch (e) {
-          base64Code = btoa(code);
+          base64Code = btoa(normalized);
+          base64Stdin = '';
         }
         fetch(runUrl, {
           method: 'POST',
@@ -110,7 +114,7 @@
           body: JSON.stringify({
             source_code: base64Code,
             language_id: 50,
-            stdin: ''
+            stdin: base64Stdin
           })
         })
           .then(function (res) {
@@ -123,8 +127,11 @@
               }
               if (res.status === 400) {
                 runBtn.disabled = false;
-                var msg = (data && (data.error || data.message)) ? String(data.error || data.message) : '요청 형식 오류(400)';
-                resultBox.textContent = msg + '\n→ [복사]한 뒤 온라인 C 컴파일러에서 실행해 보세요.';
+                var raw = (data && (data.error || data.message)) ? String(data.error || data.message) : '';
+                var msg = raw.indexOf('UTF-8') !== -1 || raw.indexOf('base64_encoded') !== -1
+                  ? '코드에 포함된 문자 때문에 실행 API에서 처리되지 않았어요. 한글/특수문자를 줄이거나, [복사]한 뒤 아래 링크에서 실행해 보세요.'
+                  : (raw || '요청 형식 오류(400)');
+                resultBox.textContent = msg + '\n→ [복사]한 뒤 programiz.com/c-programming/online-compiler 에서 실행해 보세요.';
                 resultBox.className = toolbarId + '-result error';
                 return Promise.reject(new Error('400'));
               }
@@ -173,8 +180,10 @@
       } catch (e) { /* 포맷 실패 시 원본 유지 */ }
     });
 
-    /* 참고 정답 코드 "에디터로 복사" 버튼: 같은 details 안의 pre.answer-code-block 내용을 에디터에 넣음 */
-    document.querySelectorAll('.copy-answer-to-editor').forEach(function (btn) {
+    /* 참고 정답 코드 "에디터로 복사" 버튼: 같은 practice-editor-section 안의 버튼만 이 에디터에 연결 */
+    var section = textarea.closest('.practice-editor-section');
+    var copyBtns = section ? section.querySelectorAll('.copy-answer-to-editor') : document.querySelectorAll('.copy-answer-to-editor');
+    copyBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
         var details = btn.closest('details');
         var pre = details ? details.querySelector('pre.answer-code-block') : null;
